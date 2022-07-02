@@ -21,8 +21,8 @@ const App = (props: AppProps) => {
       <React.Fragment>
         <Switch>
           <Route exact path="/login" component={Login}></Route>
-          <PrivateRoute path="/" component={MainLayout}></PrivateRoute>
-          {/* <Route path="/" component={MainLayout}></Route> */}
+          {/* <PrivateRoute path="/" component={MainLayout}></PrivateRoute> */}
+          <Route path="/" component={MainLayout}></Route>
         </Switch>
       </React.Fragment>
     </Router>
