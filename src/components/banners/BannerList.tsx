@@ -10,6 +10,8 @@ import { Typography } from '@mui/material';
 import { LinkStyle, Url } from '../../styles/style';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { Padding } from '@mui/icons-material';
+import '../../styles/banner/bannerList.css'
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -120,7 +122,7 @@ const BannerList: React.FC = () => {
   };
   return (
     <div className="list">
-      <DataGrid
+      <DataGrid 
         rows={data}
         columns={columns}
         pageSize={20}

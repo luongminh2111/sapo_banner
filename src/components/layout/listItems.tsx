@@ -35,7 +35,7 @@ export const mainListItems = (
       <ListItemIcon sx={listIcon}>
         <ViewCarouselIcon sx={{ color: 'white' }} />
       </ListItemIcon>
-      <ListItemText disableTypography primary="Quản lý banner" sx={text} />
+      <ListItemText disableTypography primary="Quản lý Banner" sx={text} />
     </ListItemButton>
     <ListItemButton component={Link} to="/page" sx={itemStyle}>
       <ListItemIcon sx={listIcon}>

@@ -41,3 +41,4 @@ export const CellTable = {
   borderBottom: 'none',
   padding: '10px',
 };
+

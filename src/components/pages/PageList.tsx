@@ -170,7 +170,7 @@ const PageList: React.FC = () => {
       <DataGrid
         rows={pageList}
         columns={columns}
-        pageSize={10}
+        
         rowsPerPageOptions={[10]}
         disableSelectionOnClick
         initialState={{
