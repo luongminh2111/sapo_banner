@@ -1,0 +1,107 @@
+stages:
+  - build
+  - package
+  - deploy
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-$CI_COMMIT_REF_SLUG
+  CI_JOB_REF_DEV: "dev"
+  CI_JOB_REF_STAGING: "staging"
+  CI_JOB_REF_PRODUCTION: "master"
+  CI_JOB_ID_DEV: $CI_JOB_ID_DEV
+
+.dependencies_cache:
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - .npm
+
+build js:
+  stage: build
+  tags:
+    - npm
+  extends: .dependencies_cache
+  script:
+    - npm ci --cache .npm
+    - CI='' npm run build:$CI_COMMIT_REF_SLUG
+  artifacts:
+    paths:
+      - build
+      - nginx.conf
+      - Dockerfile
+    expire_in: 1 hour
+  only:
+    - dev
+
+build docker:
+  stage: package
+  tags:
+    - dockercli
+  script:
+    - docker build -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
+  only:
+    - dev
+
+deploy-to-dev:
+  extends: .deploy-to-template
+  before_script:
+    - export _CI_JOB_TOKEN=$CI_JOB_TOKEN_DEV
+    - export _CI_JOB_REF=$CI_JOB_REF_DEV
+    - export _CI_JOB_ID=$CI_JOB_ID_DEV
+  only:
+    refs:
+      - dev
+    variables:
+      - $CI_REGISTRY_IMAGE
+
+deploy-to-staging:
+  extends: .deploy-to-template
+  environment:
+    name: staging
+  before_script:
+    - export _CI_JOB_TOKEN=$CI_JOB_TOKEN_STAGING
+    - export _CI_JOB_REF=$CI_JOB_REF_STAGING
+    - export _CI_JOB_ID=$CI_JOB_ID_STAGING
+  only:
+    refs:
+      - staging
+    variables:
+      - $CI_REGISTRY_IMAGE
+
+deploy-to-production:
+  extends: .deploy-to-template
+  environment:
+    name: production
+  before_script:
+    - export _CI_JOB_TOKEN=$CI_JOB_TOKEN_PROD
+    - export _CI_JOB_REF=$CI_JOB_REF_PROD
+    - export _CI_JOB_ID=$CI_JOB_REF_PRODUCTION
+  only:
+    refs:
+      - master
+    variables:
+      - $CI_REGISTRY_IMAGE
+
+
+.deploy-to-template:
+  stage: deploy
+  tags:
+    - curl
+  cache: { }
+  script:
+    - "curl --insecure --fail -X POST -F token=$_CI_JOB_TOKEN -F ref=$_CI_JOB_REF -F \"variables[IMAGE_TAG]=$IMAGE_TAG\" https://git.dktsoft.com:2008/api/v4/projects/$_CI_JOB_ID/trigger/pipeline"
+  artifacts: { }
+  variables:
+    GIT_STRATEGY: none
+  environment:
+    name: dev
+  when: on_success
+  only:
+    refs:
+      - local
+    variables:
+      - $CI_REGISTRY_IMAGE
+  except:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /\[ci-cd .*skip\]/
+
