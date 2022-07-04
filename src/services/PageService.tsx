@@ -17,6 +17,10 @@ class PageService {
     return axios.get(`/api/pages/${pageId}`);
   };
 
+  getPageInfoByPageUrl = (pageUrl: string) => {
+    return axios.get(`/api/pages/pageUrl/${pageUrl}`);
+  }
+
   getAllPage = () => {
     return axios.get(`/api/pages/all`);
   };

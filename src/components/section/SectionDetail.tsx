@@ -20,6 +20,10 @@ type SectionInfo = {
   divId: string;
   width: number;
   height: number;
+  createdBy?: string;
+  lastModifiedBy?: string;
+  createdDate?: Date;
+  lastModifiedDate?: Date;
 };
 interface CustomState {
   detail: SectionInfo;

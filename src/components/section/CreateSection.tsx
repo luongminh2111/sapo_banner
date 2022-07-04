@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
@@ -18,6 +19,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 });
 const CreateSection: React.FC = () => {
   let history = useHistory();
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [code, setCode] = React.useState('');
   const [divId, setDivId] = React.useState('');
   const [displayMode, setDisplayMode] = React.useState<number>();
@@ -33,6 +36,11 @@ const CreateSection: React.FC = () => {
   const [displayDemoString, setDisplayDemoString] = React.useState('none');
   const [widthString, setWidthString] = React.useState('');
   const [heightString, setHeightString] = React.useState('');
+  const [username, setUsername] = React.useState();
+
+  useEffect(() => {
+    setUsername(userInfo.username);
+}, []);
 
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -121,7 +129,7 @@ const CreateSection: React.FC = () => {
         code: code,
         width: width,
         height: height,
-        createdBy: '',
+        createdBy: username,
       };
       axios.post('/api/sections', sectionItem).then(() => {
         history.goBack();
