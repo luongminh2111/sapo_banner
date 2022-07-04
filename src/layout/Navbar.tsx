@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -49,10 +49,22 @@ const Navbar = (props: NavbarProps) => {
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.authentication.account);
 
+  const [username, setUsername] = useState({username: account.username});
   const [open, setOpen] = useState(true);
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openAccountMenu = Boolean(anchorEl);
+
+  
+
+  useEffect(() => {
+    if (typeof account.username !== 'undefined'){
+      localStorage.setItem('user',JSON.stringify(username));
+    } else {
+      console.log("Something went wrong");
+      // localStorage.setItem('user',JSON.stringify(username)); 
+    }
+  }, []);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -65,6 +77,7 @@ const Navbar = (props: NavbarProps) => {
 
   const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
     dispatch(logout());
+    localStorage.removeItem('user');
     history.push('/login');
   };
 
