@@ -79,6 +79,8 @@ type WebInfo = {
 };
 const CreateBanner: React.FC = () => {
   let history = useHistory();
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [pstValue, setPstValue] = React.useState<string>('0');
   const [position, setPosition] = React.useState<string>('default');
   const [pageNameList, setPageNameList] = React.useState<string[]>([]);
@@ -121,6 +123,8 @@ const CreateBanner: React.FC = () => {
   const [errorWebCode, setErrorWebCode] = React.useState<String>();
   const [errorWebDomain, setErrorWebDomain] = React.useState<String>();
   const [displayBox, setDisplayBox] = React.useState('none');
+  const [username, setUsername] = useState();
+
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -131,9 +135,12 @@ const CreateBanner: React.FC = () => {
       },
     },
   };
+
   useEffect(() => {
     getAllWebsite();
+    setUsername(userInfo.username);
   }, []);
+
   const getAllWebsite = async () => {
     await WebsiteService.getAllWebsite().then((res) => {
       setWebList(res.data);
@@ -304,7 +311,7 @@ const CreateBanner: React.FC = () => {
               pageName: pageName,
               pageUrl: pageUrl,
               createdDate: new Date(),
-              createdBy: '',
+              createdBy: username,
             };
             PageService.savePage(PageInfo, setOpen).then((response) => {
               if (typeof response === 'undefined') {
@@ -373,7 +380,7 @@ const CreateBanner: React.FC = () => {
                 campaignName,
               width: widthImg,
               height: heightImg,
-              createdBy: '',
+              createdBy: username,
             };
             axios.post('/api/banners', bannerItem).then(() => {
               saveToBannerMapping(code);
@@ -416,7 +423,7 @@ const CreateBanner: React.FC = () => {
         code: webCode,
         domain: webDomain,
         createdDate: new Date(),
-        createdBy: '',
+        createdBy: username,
         webKey: 'code:' + webCode + ', domain: ' + webDomain,
       };
       await WebsiteService.saveWebsite(WebsiteInfo).then((response) => {
