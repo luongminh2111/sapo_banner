@@ -48,14 +48,18 @@ const AddBannerOnSection: React.FC = () => {
   const location = useLocation();
   const state = location.state as CustomState;
   const history = useHistory();
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [bannerEnabled, setBannerEnabled] = useState<Banner[]>([]);
   const [bannerArray, setBannerArray] = useState<BannerMapping[]>([]);
+  const [username, setUsername] = useState();
 
   const displayUtil = state.detail.mode;
   const id = state.detail.id;
   const scale = state.detail.width / state.detail.height;
   useEffect(() => {
     getData();
+    setUsername(userInfo.username);
   }, [bannerArray]);
 
   const getData = () => {
@@ -75,7 +79,7 @@ const AddBannerOnSection: React.FC = () => {
             percentage: 0,
             position: '0',
             positionValue: '0',
-            createdBy: 'Luong Minh',
+            createdBy: username,
           };
           BannerService.saveBannerMapping(newItem);
         }
@@ -94,7 +98,7 @@ const AddBannerOnSection: React.FC = () => {
             position: '0',
             positionValue: '0',
             percentage: typeof item.percentage === 'object' ? 0 : item.percentage,
-            createdBy: 'Luong Minh',
+            createdBy: username,
           };
           BannerService.saveBannerMapping(newItem);
         }

@@ -63,6 +63,8 @@ const CreateSectionAndPage: React.FC = () => {
   let history = useHistory();
   const location = useLocation();
   const websiteInfo = location.state as CustomState;
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [modeHide, setModeHide] = React.useState<number>(0);
   const [numberHide, setNumberHide] = React.useState<number>(0);
   const [code, setCode] = React.useState('');
@@ -90,6 +92,17 @@ const CreateSectionAndPage: React.FC = () => {
   const [disableHideInput, setDisableHideInput] = React.useState<boolean>(true);
   const [chosenPage, setChosenPage] = useState();
   const [pageNameList, setPageNameList] = React.useState<string[]>([]);
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    getPageInWebsite();
+    setUsername(userInfo.username);
+  }, []);
+  const getPageInWebsite = () => {
+    PageService.getPageByWebsiteId(websiteInfo.detail.id).then((response) => {
+      setPageList(response.data);
+    });
+  };
 
   const handleOpen = () => {
     setOpen(true as boolean);
@@ -121,7 +134,7 @@ const CreateSectionAndPage: React.FC = () => {
         pageName: pageName,
         pageUrl: pageUrl,
         createdDate: new Date(),
-        createdBy: '',
+        createdBy: username,
       };
       PageService.savePage(PageInfo, setOpenDiv).then((response) => {
         if (typeof response === 'undefined') {
@@ -131,6 +144,21 @@ const CreateSectionAndPage: React.FC = () => {
           setOpen(false as boolean);
           setOpenDiv(true);
           setErrOpen(false);
+          PageService.getPageInfoByPageUrl(pageUrl).then((res) => {
+            console.log(res.data);
+            const data = res.data;
+            const NewPageInfo = {
+              id: data.id,
+              websiteId: websiteInfo.detail.id,
+              pageName: pageName,
+              pageUrl: pageUrl,
+              createdDate: data.createdDate,
+              createdBy: username,
+            }
+            setPageList((prevState) => [...prevState, NewPageInfo]);
+        })
+        
+
         }
       });
       setPageList((prevState) => [...prevState, PageInfo]);
@@ -166,14 +194,7 @@ const CreateSectionAndPage: React.FC = () => {
       },
     },
   };
-  useEffect(() => {
-    getPageInWebsite();
-  }, []);
-  const getPageInWebsite = () => {
-    PageService.getPageByWebsiteId(websiteInfo.detail.id).then((response) => {
-      setPageList(response.data);
-    });
-  };
+
 
   const handleChange = (event: SelectChangeEvent<typeof pageNameList>) => {
     const {
@@ -283,7 +304,7 @@ const CreateSectionAndPage: React.FC = () => {
         code: code,
         width: width,
         height: height,
-        createdBy: '',
+        createdBy: username,
       };
       axios.post('/api/sections', sectionItem).then((response) => {
         if (response.status === 201) {
@@ -296,9 +317,8 @@ const CreateSectionAndPage: React.FC = () => {
                   sectionCode: code,
                   modeHide: modeHide,
                   numberHide: numberHide,
-                  createdBy: '',
+                  createdBy: username,
                 };
-                console.log(' check item : ', newItem);
                 SectionService.saveSectionMapping(newItem).then((res) => {
                   if (res.status === 201) {
                     setOpenDiv(true);

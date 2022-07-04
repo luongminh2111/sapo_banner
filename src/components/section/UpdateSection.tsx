@@ -25,6 +25,10 @@ type SectionInfo = {
   divId: string;
   width: number;
   height: number;
+  createdBy?: string;
+  lastModifiedBy?: string;
+  createdDate?: Date;
+  lastModifiedDate?: Date;
 };
 interface CustomState {
   detail: SectionInfo;
@@ -33,19 +37,25 @@ const UpdateSection: React.FC = () => {
   const location = useLocation();
   const state = location.state as CustomState;
   let history = useHistory();
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [code, setCode] = React.useState<string>(state.detail.code);
   const [divId, setDivId] = React.useState<string>(state.detail.divId);
   const [displayMode, setDisplayMode] = React.useState<number>(state.detail.mode);
   const [desc, setDesc] = React.useState<string>(state.detail.desc);
   const [width, setWidth] = React.useState<number>(state.detail.width);
   const [height, setHeight] = React.useState<number>(state.detail.height);
+  const [createdBy, setCreatedBy] = React.useState(state.detail.createdBy);
   const [errorCode, setErrorCode] = React.useState<String>();
   const [errorDivId, setErrorDivId] = React.useState<String>();
   const [bannerList, setBannerList] = React.useState([] as any[]);
+  const [username, setUsername] = React.useState();
 
   useEffect(() => {
     fetchData();
+    setUsername(userInfo.username);
   }, []);
+
   const fetchData = () => {
     BannerService.getListBannerFilterBySectionId(state.detail.id).then((res) => {
       setBannerList(res.data);
@@ -62,7 +72,7 @@ const UpdateSection: React.FC = () => {
   };
   const handleValidateDivIdAndCode = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 0) {
-      let format = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
+      let format = /[`!@#$%^&*()+=[\]{};':"\\|,.<>/?~]/;
       let check = format.test(event.target.value);
       if (check) {
         return 'Nội dung không được chứa kí tự đặc biệt';
@@ -97,7 +107,9 @@ const UpdateSection: React.FC = () => {
       code: code,
       width: width,
       height: height,
-      lastModifiedBy: 'Lương Minh',
+      createdBy: createdBy,
+      lastModifiedBy: username,
+      lastModifiedDate: new Date(),
     };
 
     axios

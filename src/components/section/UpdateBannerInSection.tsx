@@ -35,13 +35,19 @@ interface BannerMapping {
 const UpdateBannerOnSection = () => {
   const location = useLocation();
   const state = location.state as CustomState;
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [bannerEnabled, setBannerEnabled] = useState<Banner[]>([]);
   const [bannerArray, setBannerArray] = useState<BannerMapping[]>([]);
+  const [username, setUsername] = useState('');
+
   const displayUtil = state.detail.mode;
   const id = state.detail.id;
   let history = useHistory();
+
   useEffect(() => {
     getData();
+    setUsername(userInfo.username);
   }, []);
 
   const getData = () => {
@@ -72,7 +78,7 @@ const UpdateBannerOnSection = () => {
                 percentage: item.percentage,
                 position: '0',
                 positionValue: '0',
-                lastModifiedBy: 'Luong Minh',
+                lastModifiedBy: username,
               };
               BannerService.updateBannerMapping(newItem);
             }
