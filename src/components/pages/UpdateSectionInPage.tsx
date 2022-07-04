@@ -51,12 +51,16 @@ const UpdateSectionInPage = () => {
   const location = useLocation();
   const state = location.state as CustomState;
   const history = useHistory();
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [sectionEnabled, setSectionEnabled] = useState<Section[]>([]);
   const [sectionArray, setSectionArray] = useState<SectionMapping[]>([]);
+  const [username, setUsername] = useState();
 
   const pageId = state.detail;
   useEffect(() => {
     getData();
+    setUsername(userInfo.username);
   }, []);
 
   const getData = () => {
@@ -75,7 +79,7 @@ const UpdateSectionInPage = () => {
               pageId: pageId,
               modeHide: item.modeHide,
               numberHide: item.numberHide,
-              lastModifiedBy: 'Luong Minh',
+              lastModifiedBy: username,
             };
             SectionService.updateSectionMapping(newItem);
           }

@@ -42,6 +42,7 @@ const UpdatePage: React.FC = () => {
   const location = useLocation();
   const state = location.state as CustomState;
   const history = useHistory();
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
 
   const [pageName, setPageName] = useState(state.detail.pageName);
   const [websiteId, setWebsiteId] = useState(String(state.detail.websiteId));
@@ -51,6 +52,7 @@ const UpdatePage: React.FC = () => {
   const [errOpen, setErrOpen] = useState(false);
   const [errorName, setErrorName] = React.useState<String>();
   const [errorTitle, setErrorTitle] = React.useState<String>();
+  const [username, setUsername] = useState();
 
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -63,13 +65,13 @@ const UpdatePage: React.FC = () => {
 
   const handleValidateNameAndUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 0) {
-      let format = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>?~]/;
+      let format = /[`!@#$%^&*()+=[\]{};'"|,.<>?~]/;
       let check = format.test(event.target.value);
       if (check) {
         return 'Nội dung không được chứa kí tự đặc biệt';
       } 
-      if (event.target.value.length < 6 || event.target.value.length > 50) {
-        return 'Nội dung tối thiểu 6 kí tự, tối đa 50 kí tự';
+      if (event.target.value.length < 1 || event.target.value.length > 50) {
+        return 'Nội dung tối thiểu 1 kí tự, tối đa 50 kí tự';
       }
     }
   };
@@ -78,6 +80,7 @@ const UpdatePage: React.FC = () => {
     WebsiteService.getAllWebsite().then((response) => {
       setWebsiteList(response.data);
     });
+    setUsername(userInfo.username);
   }, []);
 
   const changePageName = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -104,7 +107,7 @@ const UpdatePage: React.FC = () => {
       createdDate: state.detail.createdDate,
       lastModifiedDate: new Date(),
       createdBy: state.detail.createdBy,
-      lastModifiedBy: 'hahah',
+      lastModifiedBy: username,
     };
     PageService.updatePage(pageInfo).then((response) => {
       if (typeof response === 'undefined') {
@@ -180,7 +183,7 @@ const UpdatePage: React.FC = () => {
             <TextField
               fullWidth
               label="Tên trang"
-              value={pageName || state.detail.pageName}
+              value={pageName || ''}
               error={Boolean(errorName)}
               helperText={errorName}
               onChange={changePageName}
@@ -188,7 +191,7 @@ const UpdatePage: React.FC = () => {
             <TextField
               fullWidth
               label="Url"
-              value={pageUrl || state.detail.pageUrl}
+              value={pageUrl || ''}
               error={Boolean(errorTitle)}
               helperText={errorTitle}
               onChange={changePageUrl}
