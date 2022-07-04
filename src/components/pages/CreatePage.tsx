@@ -35,6 +35,7 @@ const CreatePage: FC = () => {
   const location = useLocation();
   const pageState = location.state as CustomState;
   const webId = typeof pageState === 'undefined' ? undefined : pageState.webId;
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
 
   const [pageName, setPageName] = useState('');
   const [pageUrl, setPageUrl] = useState('');
@@ -48,6 +49,7 @@ const CreatePage: FC = () => {
   const [errOpen1, setErrOpen1] = useState(false);
   const [errorName, setErrorName] = React.useState<String>();
   const [errorUrl, setErrorUrl] = React.useState<String>();
+  const [username, setUsername] = useState();
 
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -60,7 +62,7 @@ const CreatePage: FC = () => {
 
   const handleValidateNameAndUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 0) {
-      let format = /[`!@#$%^&*()+\=[\]{};':"\\|,.<>?~]/;
+      let format = /[`!@#$%^&*()+=[\]{};':"|,<>?~]/;
       let check = format.test(event.target.value);
       if (check) {
         return 'Nội dung không được chứa kí tự đặc biệt';
@@ -75,6 +77,7 @@ const CreatePage: FC = () => {
     WebsiteService.getAllWebsite().then((response) => {
       setWebsiteList(response.data);
     });
+    setUsername(userInfo.username);
   }, []);
 
   const changePageName = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -104,7 +107,7 @@ const CreatePage: FC = () => {
         pageName: pageName,
         pageUrl: pageUrl,
         createdDate: new Date(),
-        createdBy: '',
+        createdBy: username,
       };
       PageService.savePage(PageInfo, setOpen).then((response) => {
         if (typeof response === 'undefined') {

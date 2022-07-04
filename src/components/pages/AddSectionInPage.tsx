@@ -50,12 +50,16 @@ const AddSectionInPage: React.FC = () => {
   const location = useLocation();
   const state = location.state as CustomState;
   const history = useHistory();
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [sectionEnabled, setSectionEnabled] = useState<Section[]>([]);
   const [sectionArray, setSectionArray] = useState<SectionMapping[]>([]);
+  const [username, setUsername] = useState();
 
   const id = state.detail.id;
   useEffect(() => {
     getData();
+    setUsername(userInfo.username);
   }, []);
 
   const getData = async () => {
@@ -74,7 +78,7 @@ const AddSectionInPage: React.FC = () => {
           sectionId: item.id,
           modeHide: item.modeHide,
           numberHide: typeof item.numberHide === 'object' ? 0 : item.numberHide,
-          createdBy: 'Luong Minh',
+          createdBy: username,
         };
         console.log(' check item : ', newItem);
         SectionService.saveSectionMapping(newItem);
