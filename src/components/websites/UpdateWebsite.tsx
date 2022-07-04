@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, MouseEvent } from 'react';
+import React, { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import {
   TextField,
@@ -38,6 +38,7 @@ const UpdateWebsite: React.FC = () => {
   const location = useLocation();
   const state = location.state as CustomState;
   const history = useHistory();
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
 
   const [code, setCode] = useState(state.detail.code);
   const [domain, setDomain] = useState(state.detail.domain);
@@ -45,6 +46,11 @@ const UpdateWebsite: React.FC = () => {
   const [errOpen, setErrOpen] = useState(false);
   const [errorCode, setErrorCode] = React.useState<String>();
   const [errorDomain, setErrorDomain] = React.useState<String>();
+  const [username, setUsername] = useState();
+
+  useEffect(() => {
+    setUsername(userInfo.username);
+  }, []);
 
   const handleValidateCodeAndDomain = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 0) {
@@ -54,8 +60,8 @@ const UpdateWebsite: React.FC = () => {
       if (check) {
         return 'Nội dung không được chứa kí tự đặc biệt';
       }
-      if (event.target.value.length < 6 || event.target.value.length > 50) {
-        return 'Nội dung tối thiểu 6 kí tự, tối đa 50 kí tự';
+      if (event.target.value.length < 1 || event.target.value.length > 50) {
+        return 'Nội dung tối thiểu 1 kí tự, tối đa 50 kí tự';
       }
     }
   };
@@ -89,7 +95,7 @@ const UpdateWebsite: React.FC = () => {
       createdDate: state.detail.createdDate,
       lastModifiedDate: new Date(),
       createdBy: state.detail.createdBy,
-      lastModifiedBy: 'keeper of the light',
+      lastModifiedBy: username,
       webKey: state.detail.webKey,
     };
     WebsiteService.updateWebsite(websiteInfo).then((response) => {
@@ -158,7 +164,7 @@ const UpdateWebsite: React.FC = () => {
               defaultValue=""
               error={Boolean(errorCode)}
               helperText={errorCode}
-              value={code || state.detail.code}
+              value={code || ''}
               onChange={changeCode}
             />
             <TextField
@@ -166,7 +172,7 @@ const UpdateWebsite: React.FC = () => {
               label="Website Domain"
               error={Boolean(errorDomain)}
               helperText={errorDomain}
-              value={domain || state.detail.domain}
+              value={domain || ''}
               onChange={changeDomain}
             />
           </FormControl>
