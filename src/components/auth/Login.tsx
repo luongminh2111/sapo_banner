@@ -24,18 +24,6 @@ const Login = (props: LoginProps) => {
     from: { pathname: '/', search: location.search },
   };
 
-<<<<<<< HEAD
-  const handleUserKeyPress = (event: React.KeyboardEvent<HTMLElement>) => {
-    const { key } = event
-      if (key === "Escape") {
-        alert("hello")
-      }
-  }
-
-
-  const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
-   
-=======
   // const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
   //   event.preventDefault();
   //   setMessage('');
@@ -47,7 +35,6 @@ const Login = (props: LoginProps) => {
   // };
 
   const handleSubmit = async (event: any) => {
->>>>>>> dbfbb507d459616d8e1a758c5fe41a4121b36889
     event.preventDefault();
     setMessage('');
     setLoading(true);
@@ -115,7 +102,7 @@ const Login = (props: LoginProps) => {
                       color="primary"
                       sx={{ my: 2, py: 1.5, width: 300, ml: 8 }}
                       disabled={loading}
-                      onKeyDown = {handleUserKeyPress}
+                   
                   
                     >
                       {loading && (
