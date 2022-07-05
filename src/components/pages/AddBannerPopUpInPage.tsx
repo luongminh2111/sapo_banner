@@ -30,6 +30,7 @@ type BannerMapping = {
   position: string;
   positionValue: string;
   checked: boolean;
+  createdBy?: string;
 };
 
 const AddBannerPopUpInPage: React.FC = (props: any) => {
@@ -62,6 +63,7 @@ const AddBannerPopUpInPage: React.FC = (props: any) => {
           position: item.position === 'undefined' ? 0 : item.position,
           positionValue: item.positionValue === 'undefined' ? 0 : item.positionValue,
           percentage: 0,
+          createdBy: username,
           lastModifiedBy: username,
         };
         BannerService.saveBannerMapping(newItem);
