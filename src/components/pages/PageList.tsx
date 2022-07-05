@@ -126,7 +126,7 @@ const PageList: React.FC = () => {
       width: 300,
       headerClassName: 'super-app-theme--header',
       renderCell: (params) => (
-        <Typography onClick={handleWebsiteClick(params.id)} sx={LinkStyle}>
+        <Typography onClick={handleWebsiteClick(params.id)} >
           {params.value}
         </Typography>
       ),
@@ -134,7 +134,7 @@ const PageList: React.FC = () => {
     {
       field: 'pageUrl',
       headerName: 'Đường dẫn của trang',
-      width: 500,
+      width: 300,
       headerClassName: 'super-app-theme--header',
       // renderCell: (params) => (
       //   <Typography onClick={() => openInNewTab(params.value)} sx={Url}>

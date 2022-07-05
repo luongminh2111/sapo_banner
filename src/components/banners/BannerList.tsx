@@ -68,7 +68,7 @@ const BannerList: React.FC = () => {
     {
       field: 'title',
       headerName: 'Chủ đề',
-      width: 250,
+      width: 230,
       headerClassName: 'super-app-theme--header',
       renderCell: (params) => (
         <Typography onClick={handleViewDetailClick(params.id)} sx={Url}>
@@ -79,7 +79,7 @@ const BannerList: React.FC = () => {
     {
       field: 'url',
       headerName: 'URL',
-      width: 340,
+      width: 300,
       headerClassName: 'super-app-theme--header',
       renderCell: (params) => (
         <Typography onClick={() => openInNewTab(params.value)} sx={Url}>
