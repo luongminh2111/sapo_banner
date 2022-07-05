@@ -327,6 +327,19 @@ const PageSection: React.FC = () => {
         <Box sx={{ mt: 2 }} style={BoxStyle}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
             <Typography variant="h6">Thông tin chi tiết</Typography>
+            <div>
+            <Button
+              variant="contained"
+              sx={{ mr: 2 }}
+              onClick={() =>
+                history.push({
+                  pathname: '/page/update/' + pageInfo.id,
+                  state: { detail: pageInfo },
+                })
+              }
+            >
+              Sửa thông tin
+            </Button>
             <Button
               variant="contained"
               onClick={() =>
@@ -338,6 +351,7 @@ const PageSection: React.FC = () => {
             >
               Thêm khu vực mới
             </Button>
+            </div>
           </Box>
           <Divider />
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
