@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, MouseEvent } from 'react';
+import React, { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   TextField,
@@ -20,15 +20,22 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 });
 
 const CreateWebsite: React.FC = () => {
+
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [code, setCode] = useState('');
   const [domain, setDomain] = useState('');
   const history = useHistory();
   const [open, setOpen] = useState(false);
   const [errOpen, setErrOpen] = useState(false);
   const [errOpen1, setErrOpen1] = useState(false);
-
   const [errorCode, setErrorCode] = React.useState<String>();
   const [errorDomain, setErrorDomain] = React.useState<String>();
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+      setUsername(userInfo.username);
+  }, []);
 
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -40,10 +47,10 @@ const CreateWebsite: React.FC = () => {
     setErrOpen1(false);
   };
 
-  const handleValidateCodeAndDomain = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleValidateCode = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 0) {
       // Cho phép sử dụng: : / .
-      let format = /[`!@#$%^&*()_+\-=[\]{};'"\\|,<>/?~]/;
+      let format = /[`!@#$%^&*()_+\=[\]{};'"\\|,<>/?~]/;
       let check = format.test(event.target.value);
       if (check) {
         return 'Nội dung không được chứa kí tự đặc biệt';
@@ -54,14 +61,28 @@ const CreateWebsite: React.FC = () => {
     }
   };
 
+  const handleValidateDomain = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value.length > 0) {
+      // Cho phép sử dụng: : / .
+      let format = /[`^*()+{};<>]/;
+      let check = format.test(event.target.value);
+      if (check) {
+        return 'Nội dung không được chứa kí tự đặc biệt';
+      }
+      if (event.target.value.length < 1 || event.target.value.length > 50) {
+        return 'Nội dung tối thiểu 1 kí tự, tối đa 50 kí tự';
+      }
+    }
+  }
+
   const changeWebsiteCode = (event: ChangeEvent<HTMLInputElement>): void => {
     setCode((event.target as HTMLInputElement).value);
-    setErrorCode(handleValidateCodeAndDomain(event));
+    setErrorCode(handleValidateCode(event));
   };
 
   const changeDomain = (event: ChangeEvent<HTMLInputElement>): void => {
     setDomain((event.target as HTMLInputElement).value);
-    // setErrorDomain(handleValidateCodeAndDomain(event));
+    setErrorDomain(handleValidateDomain(event));
   };
 
   const saveWebsiteInfo = (event: MouseEvent<HTMLElement>): void => {
@@ -78,7 +99,7 @@ const CreateWebsite: React.FC = () => {
           code: code,
           domain: domain,
           createdDate: new Date(),
-          createdBy: 'kotl',
+          createdBy: username,
           webKey: 'code:' + code + ', domain: ' + domain,
         };
         WebsiteService.saveWebsite(WebsiteInfo).then((response) => {

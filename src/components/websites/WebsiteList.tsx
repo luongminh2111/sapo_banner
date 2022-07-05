@@ -154,7 +154,7 @@ const WebsiteList: React.FC = () => {
   ];
 
   return (
-    <div className="list">
+    <div className="list" style={{display: 'flex'}}>
       <DataGrid
         rows={websiteListTemp}
         columns={columns}

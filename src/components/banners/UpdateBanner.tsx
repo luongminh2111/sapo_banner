@@ -54,6 +54,8 @@ const UpdateBanner: React.FC = (props: any) => {
   const location = useLocation();
   const state = location.state as CustomState;
   let history = useHistory();
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [code, setCode] = React.useState(state.detail.code);
   const [title, setTitle] = React.useState(state.detail.title);
   const [type, setType] = React.useState(state.detail.type);
@@ -82,6 +84,7 @@ const UpdateBanner: React.FC = (props: any) => {
   const [source, setSource] = React.useState('');
   const [campaignName, setCampaignName] = React.useState('');
   const [campaignMedium, setCampaignMedium] = React.useState('');
+  const [username, setUsername] = React.useState();
 
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -114,6 +117,7 @@ const UpdateBanner: React.FC = (props: any) => {
   };
   useEffect(() => {
     getData();
+    setUsername(userInfo.username);
   }, []);
   const getData = () => {
     fetch('/api/banners/' + id)
@@ -167,7 +171,7 @@ const UpdateBanner: React.FC = (props: any) => {
 
   const handleValidateCodeAndTittle = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 0) {
-      let format = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>?~]/;
+      let format = /[`!@#$%^&*()+=[\]{};':"\\|,.<>?~]/;
       let check = format.test(event.target.value);
       if (check) {
         return 'Nội dung không được chứa kí tự đặc biệt';
@@ -235,7 +239,8 @@ const UpdateBanner: React.FC = (props: any) => {
             campaignName,
           width: widthImg,
           height: heightImg,
-          lastModifiedBy: 'Luong Minh',
+          createdBy: state.detail.createdBy,
+          lastModifiedBy: username,
         };
 
         axios.put('/api/banners', bannerItem).then((response) => {
@@ -265,7 +270,7 @@ const UpdateBanner: React.FC = (props: any) => {
                   campaignName,
                 width: widthImg,
                 height: heightImg,
-                lastModifiedBy: 'Luong Minh',
+                lastModifiedBy: username,
               };
 
               axios.put('/api/banners', bannerItem).then((response) => {

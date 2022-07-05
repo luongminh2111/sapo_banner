@@ -35,11 +35,16 @@ type BannerMapping = {
 const AddBannerPopUpInPage: React.FC = (props: any) => {
   const pageId = props.match.params.id;
   const history = useHistory();
+  const userInfo = (typeof localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '') : '');
+
   const [bannerList, setBannerList] = useState([] as Banner[]);
   const [bannerArray, setBannerArray] = useState([] as BannerMapping[]);
+  const [username, setUsername] = useState();
+
 
   useEffect(() => {
     fetchDataBanner();
+    setUsername(userInfo.username);
   }, []);
 
   const fetchDataBanner = () => {
@@ -57,7 +62,7 @@ const AddBannerPopUpInPage: React.FC = (props: any) => {
           position: item.position === 'undefined' ? 0 : item.position,
           positionValue: item.positionValue === 'undefined' ? 0 : item.positionValue,
           percentage: 0,
-          lastModifiedBy: 'Luong Minh',
+          lastModifiedBy: username,
         };
         BannerService.saveBannerMapping(newItem);
       }

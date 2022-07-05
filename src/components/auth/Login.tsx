@@ -24,6 +24,7 @@ const Login = (props: LoginProps) => {
     from: { pathname: '/', search: location.search },
   };
 
+<<<<<<< HEAD
   const handleUserKeyPress = (event: React.KeyboardEvent<HTMLElement>) => {
     const { key } = event
       if (key === "Escape") {
@@ -34,6 +35,19 @@ const Login = (props: LoginProps) => {
 
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
    
+=======
+  // const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
+  //   event.preventDefault();
+  //   setMessage('');
+  //   setLoading(true);
+  //   const result = await dispatch(login(username, password));
+  //   if (result?.payload?.data) {
+  //     history.push(from);
+  //   }
+  // };
+
+  const handleSubmit = async (event: any) => {
+>>>>>>> dbfbb507d459616d8e1a758c5fe41a4121b36889
     event.preventDefault();
     setMessage('');
     setLoading(true);
@@ -62,7 +76,9 @@ const Login = (props: LoginProps) => {
                     <div className="label">
                       <h1>Trang quản lý banner</h1>
                     </div>
+                    <form onSubmit={handleSubmit}>
                     <FormControl fullWidth>
+
                       <TextField
                         margin="normal"
                         required
@@ -93,7 +109,7 @@ const Login = (props: LoginProps) => {
                       />
                     </FormControl>
                     <Button
-                      type="button"
+                      type="submit"
                       onClick={handleSubmit}
                       variant="contained"
                       color="primary"
@@ -107,6 +123,7 @@ const Login = (props: LoginProps) => {
                       )}
                       Đăng nhập
                     </Button>
+                    </form>
                     {message && (
                       <div className="form-group">
                         <div className="alert alert-danger" role="alert">

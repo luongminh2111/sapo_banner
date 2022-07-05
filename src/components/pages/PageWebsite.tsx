@@ -185,6 +185,22 @@ const PageListByWebId: React.FC = () => {
           <Typography variant="h6" sx={{ color: 'blue' }}>
             Thông tin website{' '}
           </Typography>
+          <div>
+          <Button
+            variant="contained"
+            sx={{
+              width: '170px',
+              mr: 2
+            }}
+            onClick={() =>
+              history.push({
+                pathname: '/website/update/' + websiteInfo.id,
+                state: { detail: websiteInfo },
+              })
+            }
+          >
+            Sửa thông tin
+          </Button>
           <Button
             variant="contained"
             sx={{
@@ -199,6 +215,7 @@ const PageListByWebId: React.FC = () => {
           >
             Thêm khu vực
           </Button>
+          </div>
         </Box>
         <Divider />
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
