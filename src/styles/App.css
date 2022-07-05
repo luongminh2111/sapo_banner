@@ -3,11 +3,12 @@
 }
 .list  {
   height: 70vh;
+  text-align: center;
 }
 .super-app-theme--header{
   font-size: 16px;
   font-weight: 600;
 }
 .list p {
-  padding-top: 15px;
+  margin-bottom: 0;
 }
