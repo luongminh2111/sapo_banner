@@ -60,7 +60,7 @@ const Navbar = (props: NavbarProps) => {
     if (typeof account.username !== 'undefined'){
       localStorage.setItem('user',JSON.stringify(username));
     } else {
-      console.log("Something went wrong");
+      // console.log("Something went wrong");
       // localStorage.setItem('user',JSON.stringify(username)); 
     }
   }, []);

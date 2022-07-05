@@ -144,7 +144,7 @@ const CreatePage: FC = () => {
           }}
         >
           <ArrowBackIosNewIcon sx={{ fontSize: '14px', mr: '5px' }} />
-          Quay lại danh sách các khu vực
+          Quay lại danh sách các trang
         </Button>
         <Box sx={{ justifyContent: 'space-between', display: 'inline-flex', gap: 2 }}>
           <Button
