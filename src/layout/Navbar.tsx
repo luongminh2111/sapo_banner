@@ -159,7 +159,7 @@ const Navbar = (props: NavbarProps) => {
                 display: 'block',
                 position: 'absolute',
                 bottom: 0,
-                right: 14,
+                right: 10,
                 width: 10,
                 height: 10,
                 bgcolor: 'background.paper',

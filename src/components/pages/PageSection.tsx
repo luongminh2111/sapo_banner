@@ -367,6 +367,7 @@ const PageSection: React.FC = () => {
             }}
             style={BoxStyle}
           >
+            <Box sx={{display:'flex'}}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
               <Tab
                 label="Các khu vực"
@@ -380,7 +381,7 @@ const PageSection: React.FC = () => {
               />
               <Button
                 variant="contained"
-                sx={{ minWidth: '150px', display: displayTabBanner, marginLeft: '750px' }}
+                sx={{ minWidth: '150px', display: displayTabBanner, marginLeft: '650px' }}
                 onClick={() => handleGoToAddBaner()}
               >
                 Thêm
@@ -389,17 +390,20 @@ const PageSection: React.FC = () => {
                 variant="contained"
                 sx={{
                   minWidth: '150px',
-                  display: displayTabSection,
-                  marginLeft: '750px',
+                  
+                  marginLeft: '650px',
+                  
+                
                 }}
                 onClick={() => handleGoToUpdateSectionInPage()}
               >
                 Chỉnh sửa
               </Button>
             </Tabs>
+            </Box>
           </Box>
           <TabPanel value={value} index={1}>
-            <Box sx={{ width: '100%' }} style={BoxStyle2}>
+            <Box sx={{ width: '100%' }} style={BoxStyle}>
               <div className="list">
                 <DataGrid
                   rows={bannerList}
@@ -411,7 +415,7 @@ const PageSection: React.FC = () => {
             </Box>
           </TabPanel>
           <TabPanel value={value} index={0}>
-            <Box sx={{ width: '100%' }} style={BoxStyle2}>
+            <Box sx={{ width: '100%' }} style={BoxStyle}>
               <div className="list">
                 <DataGrid
                   rows={data}
