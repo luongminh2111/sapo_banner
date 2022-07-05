@@ -301,7 +301,7 @@ const CreateBanner: React.FC = () => {
     if (webCode !== '') {
       await webList.map((webItem) => {
         if (webItem.code === webCode) {
-          if (pageName.length === 0 || pageUrl.length === 0) {
+          if ((pageName.length === 0 || pageUrl.length === 0) && (popUp === 'Có')) {
             setOpenCheckAll(true);
             return;
           } else {

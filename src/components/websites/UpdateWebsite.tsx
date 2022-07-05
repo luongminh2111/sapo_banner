@@ -136,7 +136,7 @@ const UpdateWebsite: React.FC = () => {
           }}
         >
           <ArrowBackIosNewIcon sx={{ fontSize: '14px', mr: '5px' }} />
-          Quay lại chi tiết website
+          Quay lại 
         </Button>
         <Box sx={{ justifyContent: 'space-between', display: 'inline-flex', gap: 2 }}>
           <Button

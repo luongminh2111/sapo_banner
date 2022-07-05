@@ -270,6 +270,7 @@ const UpdateBanner: React.FC = (props: any) => {
                   campaignName,
                 width: widthImg,
                 height: heightImg,
+                createdBy: state.detail.createdBy,
                 lastModifiedBy: username,
               };
 

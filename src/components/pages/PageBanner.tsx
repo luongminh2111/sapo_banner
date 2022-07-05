@@ -5,6 +5,7 @@ export interface BannerMapping {
   position: string;
   positionValue: string;
   checked: boolean;
+  createdBy?: string;
 }
 const PageBanner = ({ item, bannerArray, setBannerArray }: any) => {
   const [disable, setDisable] = React.useState<boolean>(false);
