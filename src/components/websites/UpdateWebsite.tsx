@@ -142,7 +142,7 @@ const UpdateWebsite: React.FC = () => {
           <Button
             variant="outlined"
             onClick={() => {
-              history.push('/website');
+              history.goBack();
             }}
           >
             Hủy
