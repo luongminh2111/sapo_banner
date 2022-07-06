@@ -141,7 +141,7 @@ const UpdatePage: React.FC = () => {
           <Button
             variant="outlined"
             onClick={() => {
-              history.push('/page');
+              history.goBack();
             }}
           >
             Hủy

@@ -337,7 +337,7 @@ const CreateBanner: React.FC = () => {
       title.length === 0 ||
       type.length === 0 ||
       pageNameList.length === 0 ||
-      webCode.length === 0
+      webCode.length === 0 
     ) {
       setOpenCheckAll(true);
       return;
@@ -405,7 +405,8 @@ const CreateBanner: React.FC = () => {
               position: position,
               positionValue: pstValue,
               percentage: 0,
-              lastModifiedBy: '',
+              createdBy: username,
+              lastModifiedBy: username,
             };
             BannerService.saveBannerMapping(newItem);
           }
